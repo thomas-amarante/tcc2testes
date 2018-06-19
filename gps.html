@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Geolocation</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      // Note: This example requires that you consent to location sharing when
+      // prompted by your browser. If you see the error "The Geolocation service
+      // failed.", it means you probably did not give permission for the browser to
+      // locate you.
+
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          center: new google.maps.LatLng(-30.1108061, -51.2346872),
+          zoom: 17
+        });
+		
+		var infoWindow = new google.maps.InfoWindow({map: map});
+		
+		
+
+        // Try HTML5 geolocation. - faz a busca do local onde o usuário se encontra
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            infoWindow.setPosition(pos);
+            infoWindow.setContent('Você está aqui! Amplie o mapa para verificar as quadras mais próximas de você');
+            map.setCenter(pos);
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+		  
+		 														 // ---- Aqui é a inserção do trecho para marcadores personalizados
+		  
+		var iconBase = 'https://dalitho.com.br/assets/';
+        var icons = {
+          icone1: {
+            icon: iconBase + 'sbv.png'
+          },
+          icone2: {
+            icon: iconBase + 'svb.png'
+          },
+          icone3: {
+            icon: iconBase + 'slb.png'
+          }
+        };
+		
+	// - Trecho de inserção das informações das janelas dos marcadores no mapa	
+	  var windowtestedequadrapertodecasa = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">QUADRA ZONA SUL</h1>'+
+      '<div id="bodyContent">'+
+      '<p><b>Teste de janela de informação</b>' +
+      '</div>'+
+      '</div>';
+	  
+	  var windowmapsports = '<div id="content style="text-align: center; width: 220px; height: 265px; margin: 15px 0 0 20px">'+
+	  '<h1 id="firstHeading" class="firstHeading">MAP SPORTS</h1>'+
+      '<div id="siteNotice"><img style="border-radius:100%; border: 1px solid #e2e2e2;" src="https://www.dalitho.com.br/assets/xyz1.png" width="60px">'+
+	  '</div>'+      
+      '<div id="bodyContent">'+
+      '<p><b>Localizada na zona sul de POA, ofecere uma estrutura ideal com 4 quadras com churrasqueiras e local coberto. Estacionamento próprio com o custo de R$ 10,00</b>' +
+	  '<p><b>Site:<a href="https://www.facebook.com/mapsports10/">"Ir para o site/rede social"</a></b>'+
+	  '<p><b><a href="index.php">Agendar horário nessa quadra</a></b>'+
+      '</div>'+
+      '</div>';
+	  
+	  var windowarenasports = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">ARENA SPORTS</h1>'+
+      '<div id="bodyContent">'+
+      '<p><b>Teste de janela de informação</b>' +
+      '</div>'+
+      '</div>';
+	  
+	  var windowquadranocentro = '<div id="content">'+
+      '<div id="siteNotice">'+
+      '</div>'+
+      '<h1 id="firstHeading" class="firstHeading">Quadra no Centro de POA</h1>'+
+      '<div id="bodyContent">'+
+      '<p><b>Teste de janela de informação</b>' +
+      '</div>'+
+      '</div>';
+	  
+	
+		var infowindow = new google.maps.InfoWindow({
+   		 content: windowtestedequadrapertodecasa	
+  		});
+		
+		var infowindow1 = new google.maps.InfoWindow({
+   		 content: windowmapsports	
+  		});
+		
+		var infowindow2 = new google.maps.InfoWindow({
+   		 content: windowarenasports	
+  		}); 
+		
+		var infowindow3 = new google.maps.InfoWindow({
+   		 content: windowquadranocentro
+  		});
+		 
+		 // essas variáveis recebem as coordenadas latitude e longitude obtidas por JSON pelo site: https://developers.google.com/maps/documentation/geocoding/start    //
+		 
+		  var testedequadrapertodecasa 	= {lat: -30.1091245, lng: -51.23916759999999};
+		  var mapsports 				= {lat: -30.12206849999999, lng: -51.2091185};
+		  var arenasoccer				= {lat: -30.1133183, lng: -51.2269464};
+		  var quadranocentro			= {lat: -30.0317893, lng: -51.2271338};
+		  
+		   var marker = new google.maps.Marker({
+			position: testedequadrapertodecasa,
+			map: map,
+			icon: iconBase + 'abc.png'
+			});
+			// código para não abrir a última janela do looping quando o user clicar. --> https://pt.stackoverflow.com/questions/28334/google-maps-api-janela-abre-sempre-a-ultima
+			google.maps.event.addListener(marker, "click", (function(mrk, info) {
+			return function() {
+			info.open(map,mrk);
+			};
+			}(marker, infowindow)));
+		   
+		   var marker1 = new google.maps.Marker({
+			position: mapsports,
+			map: map,
+			icon: iconBase + 'abc.png'
+			});
+			// código para não abrir a última janela do looping quando o user clicar. --> https://pt.stackoverflow.com/questions/28334/google-maps-api-janela-abre-sempre-a-ultima
+			google.maps.event.addListener(marker1, "click", (function(mrk, info) {
+			return function() {
+			info.open(map,mrk);
+			};
+			}(marker1, infowindow1)));
+		   
+		   var marker2 = new google.maps.Marker({
+			position: arenasoccer,
+			map: map,
+			icon: iconBase + 'abc.png'
+			});
+			// código para não abrir a última janela do looping quando o user clicar. --> https://pt.stackoverflow.com/questions/28334/google-maps-api-janela-abre-sempre-a-ultima
+			google.maps.event.addListener(marker2, "click", (function(mrk, info) {
+			return function() {
+			info.open(map,mrk);
+			};
+			}(marker2, infowindow2)));
+		     
+		   var marker3 = new google.maps.Marker({
+			position: quadranocentro,
+			map: map,
+			icon: iconBase + 'abc.png'
+			});
+			// código para não abrir a última janela do looping quando o user clicar. --> https://pt.stackoverflow.com/questions/28334/google-maps-api-janela-abre-sempre-a-ultima
+			google.maps.event.addListener(marker3, "click", (function(mrk, info) {
+			return function() {
+			info.open(map,mrk);
+			};
+			}(marker3, infowindow3)));
+		  														// ----- aqui é o fim do trecho para marcadores personalizados
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+
+      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+      }
+	 
+	 	
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAPbAwRbTpLXn3BouEV9uUEEi9KAiq7awk&callback=initMap">
+    </script>
+  </body>
+</html>

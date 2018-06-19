@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>jQuery UI Datepicker</title>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css" />
+</head>
+<body>
+<input id="datepicker" type="text">
+<p class="name"></p>
+    <script type="text/javascript">
+	
+	var date = new Date();
+	date.setDate(date.getDate());
+$( document ).ready(function() {
+            $("#datepicker").datepicker({
+                startDate: date,                            
+				calendarWeeks: true,
+                autoclose: true,
+                todayHighlight: true,
+				format: "dd/mm/yyyy",
+                onSelect: function(dateText, inst) {
+                    var date = $.datepicker.parseDate(inst.settings.dateFormat || $.datepicker._defaults.dateFormat, dateText, inst.settings);
+                    var dateText = $.datepicker.formatDate("DD", date, inst.settings);
+                    $("p.name").html( "Day Name= " + dateText ); // Just the day of week
+                }
+            });
+        });
+    </script>
+</body>
+</html>
